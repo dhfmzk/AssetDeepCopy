@@ -1,0 +1,19 @@
+name: Unity Action Test
+
+on: [push]
+
+jobs:
+  echo:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        unity-version: [2018.4.12f1, 2019.2.13f1, 2019.3.0b12, 2020.1.0a14]
+    steps:
+    - run: echo -n -e "HELLO\n !\n World!" > text.txt
+
+    - uses: pCYSl5EDgo/setup-unity@master
+      with:
+        unity-version: ${{ matrix.unity-version }}
+        
+    - run: /opt/Unity/Editor/Unity -quit -batchMode -logFile -noGraphics -createManualActivationFile || exit 0
+    - run: cat Unity_v${{ matrix.unity-version }}.alf
